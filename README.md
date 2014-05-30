@@ -1,12 +1,12 @@
-# Kukushkin::TimeSeries
+# TimeSeriesMath
 
-TODO: Write a gem description
+Time series data structures and functions.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'kukushkin-time_series'
+    gem 'time_series_math'
 
 And then execute:
 
@@ -14,11 +14,42 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install kukushkin-time_series
+    $ gem install time_series_math
 
 ## Usage
 
-TODO: Write usage instructions here
+### TimeSeries
+
+`TimeSeries` class provides an data structure for storing timestamped data values.
+
+TimeSeries maintains order of its elements and provides efficient search methods
+for near-constant time access
+(depends strongly on timestamps distribution -- the more even, the better).
+
+Examples:
+```ruby
+require 'time_series_math'
+
+include TimeSeriesMath
+
+# one by one element insertion
+ts = TimeSeries.new
+ts.push 1.0, { x: 2.0, y: 3.0 }
+ts.push 1.2, { x: 2.0, y: 3.0 }
+ts.push 1.6, { x: 2.0, y: 3.0 }
+ts.push 1.9, { x: 2.0, y: 3.0 }
+ts.push 2.1, { x: 2.0, y: 3.0 }
+
+# more time-efficient batch insertion using arrays:
+ts = TimeSeries.new
+tt = [ 1.0, 1.2, 1.6, 1.9, 2.1 ]
+dd = [ {x: 2.0}, {x: 2.1}, {x: 2.5}, {x: 2.7}, {x: 2.85} ]
+ts.push_array(tt, dd)
+
+# retrieve closest element before given time
+ts[1.2] # => { x: 2.1 }
+ts[2.095] # => { x: 2.7 }
+```
 
 ## Contributing
 

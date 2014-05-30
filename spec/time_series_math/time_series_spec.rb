@@ -12,6 +12,7 @@ describe TimeSeries do
     it { expect(subject.keys).to eql [] }
     it { expect(subject.values).to eql [] }
     it { expect(subject.left_index_at(1.0)).to be nil }
+    it { expect(subject[1.0]).to be nil }
   end
 
   let(:arr_t) { [1.0, 2.0, 3.0] }
@@ -38,12 +39,29 @@ describe TimeSeries do
         expect(subject.left_index_at(10.0)).to be 2
       end
     end
+
+    describe '#[]' do
+      it 'should return nil if t < first element' do
+        expect(subject[-1.0]).to be nil
+      end
+      it 'should return i_k if T(i_k) <= t < T(i_k+1)' do
+        expect(subject[1.0]).to be 111
+        expect(subject[1.5]).to be 111
+      end
+      it 'should return last element index (N) if T(N) <= t' do
+        expect(subject[10.0]).to be 333
+      end
+    end
   end
 
   context 'when adding new items' do
     subject { TimeSeries.new(arr_t, arr_v) }
     it 'should place new items at correct place' do
       expect { subject.push(1.5, 123) }.to_not raise_error
+      expect(subject.keys).to eql [1.0, 1.5, 2.0, 3.0]
+    end
+    it 'should allow []= syntax' do
+      expect { subject[1.5] = 123 }.to_not raise_error
       expect(subject.keys).to eql [1.0, 1.5, 2.0, 3.0]
     end
   end

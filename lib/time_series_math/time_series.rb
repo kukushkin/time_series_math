@@ -1,7 +1,31 @@
 module TimeSeriesMath
-  # Simple time series object.
-  # Provides fast access to items by timestamp.
   #
+  # TimeSeries class provides an efficient data structure for storing timestamped data values.
+  #
+  # TimeSeries maintains order of its elements and provides efficient search methods
+  # for near-constant time access
+  # (depends strongly on timestamps distribution -- the more even, the better).
+  #
+  # Examples:
+  #
+  #   # one by one element insertion
+  #   ts = TimeSeries.new
+  #   ts.push 1.0, { x: 2.0, y: 3.0 }
+  #   ts.push 1.2, { x: 2.0, y: 3.0 }
+  #   ts.push 1.6, { x: 2.0, y: 3.0 }
+  #   ts.push 1.9, { x: 2.0, y: 3.0 }
+  #   ts.push 2.1, { x: 2.0, y: 3.0 }
+  #
+  #   # more time-efficient batch insertion using arrays:
+  #   ts = TimeSeries.new
+  #   tt = [ 1.0, 1.2, 1.6, 1.9, 2.1 ]
+  #   dd = [ {x: 2.0}, {x: 2.1}, {x: 2.5}, {x: 2.7}, {x: 2.85} ]
+  #   ts.push_array(tt, dd)
+  #
+  #   # retrieve closest element before given time
+  #   ts[1.2] # => { x: 2.1 }
+  #   ts[2.095] # => { x: 2.7 }
+
   class TimeSeries
     attr_reader :data
 
@@ -38,15 +62,18 @@ module TimeSeriesMath
       last && last[0]
     end
 
-
     def push(t, v)
       t = t.to_f
       i = left_index_at(t)
       if i.nil?
         @data.unshift([t, v])
       else
-        @data.insert(i+1, [t, v])
+        @data.insert(i + 1, [t, v])
       end
+    end
+
+    def []=(t, v)
+      push(t, v)
     end
 
     def push_array(arr_t, arr_v)
@@ -63,7 +90,7 @@ module TimeSeriesMath
       i = (d * size.to_f).to_i
       if @data[i][0] <= t
         # scan right
-        i += 1 while i+1 < size && t >= @data[i+1][0]
+        i += 1 while i + 1 < size && t >= @data[i + 1][0]
         i
       else
         # scan left
@@ -72,6 +99,9 @@ module TimeSeriesMath
       end
     end
 
-
-  end
+    def [](t)
+      i = left_index_at(t)
+      i && @data[i][1]
+    end
+  end # class TimeSeries
 end # module TimeSeriesMath
