@@ -103,5 +103,18 @@ module TimeSeriesMath
       i = left_index_at(t)
       i && @data[i][1]
     end
+
+    def indices_at(t)
+      li = left_index_at(t)
+      if li
+        if @data.size == li+1
+          [li, nil]
+        else
+          [li, li+1]
+        end
+      elsif @data.size > 0
+        [nil, 0]
+      end
+    end
   end # class TimeSeries
 end # module TimeSeriesMath
