@@ -23,4 +23,10 @@ describe LinearInterpolation do
     it { expect(subject[1.5]).to eql({ x: 150.to_f }) }
   end
 
+  context 'when requested value is out of range' do
+    subject { TimeSeries.new(arr_t, arr_v).use(LinearInterpolation) }
+    it { expect(subject[-1.0].to_f).to eql 100.to_f }
+    it { expect(subject[10.0].to_f).to eql 300.to_f }
+  end
+
 end
