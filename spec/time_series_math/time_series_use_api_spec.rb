@@ -1,13 +1,16 @@
 require 'spec_helper'
 
 describe TimeSeries do
+  module TimeSeriesTestProcessor
+  end
+
   it { should respond_to(:use) }
   it { should respond_to(:processor) }
   it { expect(subject.processor).to be nil }
-  it { expect(subject.use(LinearInterpolation)).to eql subject }
+  it { expect(subject.use(TimeSeriesTestProcessor)).to eql subject }
 
   context 'when using a processor' do
-    subject { TimeSeries.new.use(LinearInterpolation) }
-    it { expect(subject.processor).to eql LinearInterpolation }
+    subject { TimeSeries.new.use(TimeSeriesTestProcessor) }
+    it { expect(subject.processor).to eql TimeSeriesTestProcessor }
   end
 end

@@ -32,13 +32,13 @@ describe 'ElemwiseOperators' do
 
   describe '#elemwise_mul_scalar' do
     it 'should multiply Fixnum' do
-      expect(subject.elemwise_mul_scalar( 2.0, 2.0 )).to eql 4.0
+      expect(subject.elemwise_mul_scalar( 2.0, 3.0 )).to eql 6.0
     end
     it 'should multiply Array(s)' do
-      expect(subject.elemwise_mul_scalar(2.0, [2.0])).to eql [4.0]
+      expect(subject.elemwise_mul_scalar(2.0, [3.0])).to eql [6.0]
     end
     it 'should mutiply Hash(es)' do
-      expect(subject.elemwise_mul_scalar(2.0, { x: 2.0 })).to eql({ x: 4.0 })
+      expect(subject.elemwise_mul_scalar(2.0, { x: 3.0 })).to eql({ x: 6.0 })
     end
   end
 end
