@@ -154,20 +154,7 @@ module TimeSeriesMath
     # @return [Array] indices of the elements surrounding +t+.
     #
     def indices_at(t)
-      return [nil, nil] if size == 0
-      return [nil, 0] if t < t_first
-      return [size - 1, nil] if t >= t_last
-      ileft = 0
-      iright = size - 1
-      while iright - ileft > 1
-        icenter = ileft + (iright - ileft) / 2
-        if t >= data[icenter][0]
-          ileft = icenter
-        else
-          iright = icenter
-        end
-      end
-      [ileft, iright]
+      bsearch_indices_at(t)
     end
 
     # Use +processor+
