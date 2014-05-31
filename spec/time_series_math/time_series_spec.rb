@@ -12,6 +12,7 @@ describe TimeSeries do
     it { expect(subject.keys).to eql [] }
     it { expect(subject.values).to eql [] }
     it { expect(subject.left_index_at(1.0)).to be nil }
+    it { expect(subject.indices_at(1.0)).to eql [nil, nil] }
     it { expect(subject[1.0]).to be nil }
   end
 

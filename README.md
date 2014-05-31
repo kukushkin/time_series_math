@@ -27,7 +27,8 @@ for near-constant time access
 (depends strongly on timestamps distribution -- the more even, the better).
 
 Examples:
-```ruby
+
+``` ruby
 require 'time_series_math'
 
 include TimeSeriesMath
