@@ -137,20 +137,7 @@ module TimeSeriesMath
     # @return index of the element preceding +t+
     #
     def left_index_at(t)
-      t = t.to_f
-      return nil if size == 0 || t_first > t
-      return (size - 1) if t_last <= t
-      d = (t - t_first) / (t_last - t_first)
-      i = (d * size.to_f).to_i
-      if @data[i][0] <= t
-        # scan right
-        i += 1 while i + 1 < size && t >= @data[i + 1][0]
-        i
-      else
-        # scan left
-        i -= 1 while i > 0 && @data[i][0] > t
-        i
-      end
+      indices_at(t).first
     end
 
     # Returns value calculated at +t+.
@@ -167,18 +154,20 @@ module TimeSeriesMath
     # @return [Array] indices of the elements surrounding +t+.
     #
     def indices_at(t)
-      li = left_index_at(t)
-      if li
-        if @data.size == li + 1
-          [li, nil]
+      return [nil, nil] if size == 0
+      return [nil, 0] if t < t_first
+      return [size - 1, nil] if t >= t_last
+      ileft = 0
+      iright = size - 1
+      while iright - ileft > 1
+        icenter = ileft + (iright - ileft) / 2
+        if t >= data[icenter][0]
+          ileft = icenter
         else
-          [li, li + 1]
+          iright = icenter
         end
-      elsif @data.size > 0
-        [nil, 0]
-      else
-        [nil, nil]
       end
+      [ileft, iright]
     end
 
     # Use +processor+
