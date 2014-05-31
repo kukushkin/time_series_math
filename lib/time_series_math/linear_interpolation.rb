@@ -1,6 +1,6 @@
 module TimeSeriesMath
-  class SimpleInterpolatedTimeSeries < TimeSeries
-
+  module LinearInterpolation
+    include ElemwiseOperators
     # Returns interpolated value.
     #
     def [](t)
@@ -9,8 +9,5 @@ module TimeSeriesMath
       diff_value = elemwise_sub(@data[i1][1], @data[i0][1])
       elemwise_add(@data[i0][1], elemwise_mul_scalar(k, diff_value))
     end
-
-    # private
-
   end
 end # module TimeSeriesMath

@@ -31,7 +31,7 @@ module TimeSeriesMath
   #   ts[2.095] # => { x: 2.7 }
 
   class TimeSeries
-    attr_reader :data
+    attr_reader :data, :processor
 
     # Creates a TimeSeries object.
     #
@@ -46,6 +46,7 @@ module TimeSeriesMath
     #
     def initialize(arr_t = nil, arr_v = nil)
       @data = []
+      @processor = nil
       push_array(arr_t, arr_v) if arr_t && arr_v
     end
 
@@ -178,6 +179,13 @@ module TimeSeriesMath
       else
         [nil, nil]
       end
+    end
+
+    # Use +processor+
+    #
+    def use(processor_module)
+      @processor = processor_module
+      extend processor_module
     end
   end # class TimeSeries
 end # module TimeSeriesMath
